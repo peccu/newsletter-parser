@@ -84,7 +84,8 @@ function printElementsTree(elements, indent = 0) {
 }
 
 // 使用例
-const html = `
+const testmap = [];
+testmap.push(`
 <html>
   <body>
     <div>
@@ -98,7 +99,29 @@ const html = `
     </div>
   </body>
 </html>
-`;
+`);
 
-const repeatingElements = extractRepeatingElements(html);
-console.log(repeatingElements);
+testmap.push(`
+<html>
+  <body>
+    <div>
+      <p>Paragraph 1</p>
+      <div>
+        <p>Nested paragraph 1</p>
+      </div>
+    </div>
+    <div>
+      <p>Paragraph 2</p>
+      <div>
+        <p>Nested paragraph 2</p>
+      </div>
+    </div>
+  </body>
+</html>
+`);
+
+// run
+testmap.map(html => {
+  const repeatingElements = extractRepeatingElements(html);
+  console.log(repeatingElements);
+});

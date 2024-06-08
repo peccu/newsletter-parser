@@ -43,23 +43,20 @@ function extractRepeatingElements(html) {
 
 function findRepeatingElements(elements) {
   const repeatingElements = [];
-  let previousElement = null;
+  const seen = new WeakSet();
 
   for (const element of elements) {
-    console.log('Checking element:', element); // 追加
-    if (previousElement && isEquivalent(element, previousElement)) {
-      console.log('  Equivalent to previous element'); // 追加
-      if (!repeatingElements.length || isEquivalent(element, repeatingElements[0])) {
-        console.log('  Adding to repeating elements'); // 追加
-        repeatingElements.push(element);
-      }
-    } else {
-      console.log('  Not equivalent to previous element'); // 追加
+    if (!seen.has(element) && !isEquivalentToAny(element, repeatingElements)) {
+      repeatingElements.push(element);
+      seen.add(element);
     }
-    previousElement = element;
   }
 
   return repeatingElements;
+}
+
+function isEquivalentToAny(element, elements) {
+  return elements.some(e => isEquivalent(element, e));
 }
 
 function isEquivalent(a, b) {

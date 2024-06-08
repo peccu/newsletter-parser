@@ -34,6 +34,7 @@ function extractRepeatingElements(html) {
   const repeatingElements = findRepeatingElements(elements);
   console.log('extracted elements');
   console.log(elements);
+  printElementsTree(elements);
   console.log('repeating elements');
   console.log(repeatingElements);
   return repeatingElements;
@@ -73,6 +74,15 @@ function isEquivalent(a, b) {
     }
   }
   return true;
+}
+
+function printElementsTree(elements, indent = 0) {
+  elements.map(element => {
+    console.log(' '.repeat(indent) + element.name);
+    if (element.children.length > 0) {
+      printElementsTree(element.children, indent + 2);
+    }
+  });
 }
 
 // 使用例

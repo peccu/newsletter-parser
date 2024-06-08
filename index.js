@@ -2,28 +2,29 @@ const htmlparser = require('htmlparser2');
 
 function extractRepeatingElements(html) {
   const elements = [];
-  let currentElement = null;
-  let previousElement = null;
+  const elementStack = [];
 
   const parser = new htmlparser.Parser({
     onopentag(name, attribs) {
       const element = { name, attribs, children: [] };
-      if (currentElement) {
-        currentElement.children.push(element);
+      if (elementStack.length > 0) {
+        const parentElement = elementStack[elementStack.length - 1];
+        parentElement.children.push(element);
       } else {
         elements.push(element);
       }
-      previousElement = currentElement;
-      currentElement = element;
+      elementStack.push(element);
     },
     ontext(text) {
-      if (currentElement) {
+      if (elementStack.length > 0) {
+        const currentElement = elementStack[elementStack.length - 1];
         currentElement.text = (currentElement.text || '') + text;
       }
     },
     onclosetag(name) {
-      if (currentElement && currentElement.name === name) {
-        currentElement = previousElement;
+      const closedElement = elementStack.pop();
+      if (closedElement.name !== name) {
+        throw new Error('Invalid HTML: mismatched closing tag');
       }
     }
   }, { decodeEntities: true });

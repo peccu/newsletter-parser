@@ -1,31 +1,42 @@
 const htmlparser = require('htmlparser2');
 
-function extractLinks(html) {
-  const links = [];
+function extractElements(html, tagName) {
+  const elements = [];
   const parser = new htmlparser.Parser({
     onopentag(name, attribs) {
-      if (name === 'a' && attribs.href) {
-        links.push(attribs.href);
+      if (name === tagName) {
+        elements.push({ name, attribs });
+      }
+    },
+    onclosetag(name) {
+      if (name === tagName) {
+        elements[elements.length - 1].closeTag = true;
       }
     }
-  }, {decodeEntities: true});
+  }, { decodeEntities: true });
 
   parser.write(html);
   parser.end();
 
-  return links;
+  return elements;
 }
 
 // 使用例
 const html = `
 <html>
   <body>
-    <a href="https://example.com/article1">Article 1</a>
-    <p>Some text</p>
-    <a href="https://example.com/article2">Article 2</a>
+    <div>
+      <p>Paragraph 1</p>
+    </div>
+    <div class="important">
+      <p>Paragraph 2</p>
+    </div>
+    <div>
+      <p>Paragraph 3</p>
+    </div>
   </body>
 </html>
 `;
 
-const links = extractLinks(html);
-console.log(links);
+const divElements = extractElements(html, 'div');
+console.log(divElements);

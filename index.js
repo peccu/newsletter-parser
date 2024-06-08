@@ -74,9 +74,19 @@ function isEquivalent(a, b) {
   return true;
 }
 
+const attrStr = (element) => {
+  return Object.entries(element.attribs).length > 0
+    ? ` ${JSON.stringify(element.attribs)}`
+    : '';
+};
+
+const elmStr = (indent, elm) => {
+  return `${' '.repeat(indent)}${elm.name}${attrStr(elm)}`;
+};
+
 function printElementsTree(elements, indent = 0) {
   elements.map(element => {
-    console.log(' '.repeat(indent) + element.name);
+    console.log(elmStr(indent, element));
     if (element.children.length > 0) {
       printElementsTree(element.children, indent + 2);
     }

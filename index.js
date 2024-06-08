@@ -61,15 +61,7 @@ function findRepeatingElements(elements) {
 }
 
 function isEquivalent(a, b) {
-  if (a.name !== b.name || a.attribs.length !== b.attribs.length) {
-    return false;
-  }
-  for (const key in a.attribs) {
-    if (a.attribs[key] !== b.attribs[key]) {
-      return false;
-    }
-  }
-  if (a.text !== b.text) {
+  if (a.name !== b.name) {
     return false;
   }
   if (a.children.length !== b.children.length) {

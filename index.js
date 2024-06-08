@@ -32,6 +32,10 @@ function extractRepeatingElements(html) {
   parser.end();
 
   const repeatingElements = findRepeatingElements(elements);
+  console.log('extracted elements');
+  console.log(elements);
+  console.log('repeating elements');
+  console.log(repeatingElements);
   return repeatingElements;
 }
 
@@ -40,10 +44,15 @@ function findRepeatingElements(elements) {
   let previousElement = null;
 
   for (const element of elements) {
+    console.log('Checking element:', element); // 追加
     if (previousElement && isEquivalent(element, previousElement)) {
+      console.log('  Equivalent to previous element'); // 追加
       if (!repeatingElements.length || isEquivalent(element, repeatingElements[0])) {
+        console.log('  Adding to repeating elements'); // 追加
         repeatingElements.push(element);
       }
+    } else {
+      console.log('  Not equivalent to previous element'); // 追加
     }
     previousElement = element;
   }

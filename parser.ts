@@ -1,7 +1,12 @@
 import { Parser } from 'htmlparser2';
 
 export class Node {
-  constructor(name, attribs = {}) {
+  name: string;
+  attribs: { [key: string]: string };
+  children: (Node | string)[];
+  text: string;
+
+  constructor(name: string, attribs: { [key: string]: string } = {}) {
     this.name = name;
     this.attribs = attribs;
     this.children = [];
@@ -9,10 +14,10 @@ export class Node {
   }
 }
 
-export function parser(html) {
+export function parser(html: string): Node {
   const root = new Node("root");
   let currentNode = root;
-  const stack = [];
+  const stack: Node[] = [];
 
   const parser = new Parser({
     onopentag(name, attribs) {
@@ -27,7 +32,7 @@ export function parser(html) {
       currentNode.children.push(text.trim());
     },
     onclosetag() {
-      currentNode = stack.pop();
+      currentNode = stack.pop() as Node;
     },
   });
 
@@ -36,7 +41,7 @@ export function parser(html) {
   return root;
 }
 
-const attrStr = (element) => {
+const attrStr = (element: Node | string): string => {
   // console.log('debug: element:', element);
   // console.log('debug: element.attribs:', element.attribs);
   if (typeof element !== "object") { // text
@@ -48,7 +53,7 @@ const attrStr = (element) => {
     : "";
 };
 
-const elmStr = (indent, element) => {
+const elmStr = (indent: number, element: Node | string): string => {
   if (typeof element !== "object") { // text
     return `${" ".repeat(indent)}"${element}"`;
   }
@@ -56,7 +61,7 @@ const elmStr = (indent, element) => {
   return `${" ".repeat(indent)}${element.name}${attrStr(element)}`;
 };
 
-export function printNodeTree(elements, indent = 0) {
+export function printNodeTree(elements: Node, indent: number = 0): void {
   // console.log(elements);
   elements.children.map((element) => {
     console.log(elmStr(indent, element));

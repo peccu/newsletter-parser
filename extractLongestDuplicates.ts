@@ -1,14 +1,20 @@
-export function traverseNodes(root) {
-  const structures = {};
+import { type Node } from './parser';
+
+interface Structures {
+  [key: string]: Node[];
+}
+
+export function traverseNodes(root: Node): Structures {
+  const structures: Structures = {};
   // join nested children's tag names
   // and if the same nessting structure has found
   // push its node
-  const traverse = (node) => {
+  const traverse = (node: Node): string => {
     if (node.children.length == 0) {
       return node.name;
     }
     const structure = node.children
-      .map((child) => {
+      .map((child: (Node | string)) => {
         if (typeof child === "object") {
           // child is Node
           return `${child.name}_${traverse(child)}`;
@@ -31,7 +37,7 @@ export function traverseNodes(root) {
   return structures;
 }
 
-export function detectRepeatedStructures(root) {
+export function detectRepeatedStructures(root: Node): Node[][] {
   const structures = traverseNodes(root);
 
   // console.log('found', structures);
@@ -46,11 +52,11 @@ export function detectRepeatedStructures(root) {
   const deeperNodeDropped = removeSuffixes(repeatedKeys);
   // console.log('deeperNodeDropped', deeperNodeDropped);
 
-  return deeperNodeDropped.map((key) => structures[key]);
+  return deeperNodeDropped.map((key: string) => structures[key]);
 }
 
-function findPatterns(arr) {
-  const patterns = new Set();
+function findPatterns(arr: string[]): Set<string> {
+  const patterns = new Set<string>();
   arr.map((item, i) => {
     arr.map((suffix, j) => {
       if (i != j && item.endsWith(suffix)) {
@@ -61,14 +67,14 @@ function findPatterns(arr) {
   return patterns;
 }
 
-function removeSuffixes(arr) {
+function removeSuffixes(arr: string[]): string[] {
   const patterns = findPatterns(arr);
   // console.log(`patterns ${JSON.stringify(Array.from(patterns))}`);
   const removedShorter = arr.filter((item) => !patterns.has(item));
   return removedShorter;
 }
 
-const structureText = (node) => {
+const structureText = (node: Node | string): string => {
   if (typeof node !== "object") { // text
     return node;
   }
@@ -78,11 +84,11 @@ const structureText = (node) => {
     return `<${node.name}></${node.name}>`;
   }
 
-  const childrenString = node.children.map((child) => structureText(child));
+  const childrenString = node.children.map((child: Node | string) => structureText(child));
   return `<${node.name}>${childrenString}</${node.name}>`;
 };
 
-export function formatResponse(repeatedStructures) {
+export function formatResponse(repeatedStructures: Node[][]): string {
   const formattedResponse = repeatedStructures
     .map((structure, index) => {
       const structureString = structure.map((e) => structureText(e)).join("||");

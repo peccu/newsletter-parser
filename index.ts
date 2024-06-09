@@ -1,6 +1,6 @@
-import { parser, printNodeTree } from "./parser.js";
+import { parser, printNodeTree } from "./parser";
 // import { detectRepeatedStructures } from 'parser.js';
-import { detectRepeatedStructures, formatResponse } from "./extractLongestDuplicates.js";
+import { detectRepeatedStructures, formatResponse } from "./extractLongestDuplicates";
 
 const testmap = [];
 testmap.push(`

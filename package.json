@@ -8,7 +8,7 @@
     "start": "npm run build && node dist/index.js",
     "build": "tsc --build && echo Done || echo failed",
     "//": "to using ESModule for Jest. ref. https://jestjs.io/docs/ecmascript-modules",
-    "test": "bash -c 'node --experimental-vm-modules node_modules/jest/bin/jest.js > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "tdd": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll"
   },
   "author": "peccu",

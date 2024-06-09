@@ -24,9 +24,9 @@ describe('test removeSuffix.ts', () => {
     }
   ];
 
-  tests.map((case: Case) => {
+  tests.map((thecase: Case) => {
     test('parsed node should not be null', () => {
-      expect(removeSuffixes(case.input)).toEqual(case.expected);
+      expect(removeSuffixes(thecase.input)).toEqual(thecase.expected);
     })
   });
 });

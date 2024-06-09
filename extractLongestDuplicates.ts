@@ -1,4 +1,5 @@
 import { type Node } from './parser';
+import { removeSuffixes } from './removeSuffix';
 
 interface Structures {
   [key: string]: Node[];
@@ -55,25 +56,6 @@ export function detectRepeatedStructures(root: Node): Node[][] {
   return deeperNodeDropped.map((key: string) => structures[key]);
 }
 
-function findPatterns(arr: string[]): Set<string> {
-  const patterns = new Set<string>();
-  arr.map((item, i) => {
-    arr.map((suffix, j) => {
-      if (i != j && item.endsWith(suffix)) {
-        patterns.add(suffix);
-      }
-    });
-  });
-  return patterns;
-}
-
-function removeSuffixes(arr: string[]): string[] {
-  const patterns = findPatterns(arr);
-  // console.log(`patterns ${JSON.stringify(Array.from(patterns))}`);
-  const removedShorter = arr.filter((item) => !patterns.has(item));
-  return removedShorter;
-}
-
 const structureText = (node: Node | string): string => {
   if (typeof node !== "object") { // text
     return node;
@@ -97,20 +79,3 @@ export function formatResponse(repeatedStructures: Node[][]): string {
     .join("\n");
   return formattedResponse;
 }
-
-/*
-const input1 = ['a', 'b', 'abc', 'bc', 'ab', 'dc', 'bd', 'eghu', 'yuh', 'ghu', 'hu', 'ft'];
-console.log(input1);
-console.log(removeSuffixes(input1));
-// 出力: ['a', 'b', 'abc', 'ab', 'dc', 'bd', 'eghu', 'yuh', 'ft']
-
-const input2 = ['apple', 'applet', 'application', 'apply', 'applyto', 'hello', 'world'];
-console.log(input2);
-console.log(removeSuffixes(input2));
-// 出力: ['apple', 'applet', 'application', 'apply', 'applyto', 'hello', 'world']
-
-const input3 = ['cat', 'cats', 'catch', 'dog', 'doghouse', 'house'];
-console.log(input3);
-console.log(removeSuffixes(input3));
-// 出力: ['cat', 'catch', 'dog', 'doghouse', 'house']
-*/

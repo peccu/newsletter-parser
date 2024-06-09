@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "npm run build && node dist/index.js",
-    "build": "tsc --build && echo Done || echo failed",
+    "build": "tsc --build && echo Done || (echo failed; exit 1)",
     "//": "to using ESModule for Jest. ref. https://jestjs.io/docs/ecmascript-modules",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "tdd": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll"

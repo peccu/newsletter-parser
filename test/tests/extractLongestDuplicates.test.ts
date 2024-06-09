@@ -6,22 +6,31 @@ import { detectRepeatedStructures, formatResponse } from "../../src/extractLonge
 
 interface Case {
   input: string;
-  expected: number;
+  contain: string;
+  length: number;
 }
 
 describe('test index.ts', () => {
   const htmls: Case[] = [
     {
       input: 'test/assets/parse/simple1.html',
-      expected: 3
+      contain: 'Paragraph',
+      length: 3
     },
     {
       input: 'test/assets/parse/simple2.html',
-      expected: 2
+      contain: 'Paragraph',
+      length: 2
     },
     {
       input: 'test/assets/parse/simple3.html',
-      expected: 2
+      contain: 'Paragraph',
+      length: 2
+    },
+    {
+      input: 'test/assets/parse/simple4.html',
+      contain: 'row',
+      length: 4
     }
   ]
   htmls.map((thecase: Case) => {
@@ -36,10 +45,10 @@ describe('test index.ts', () => {
       expect(repeatedStructures).toBeTruthy();
     })
     test('extracted node are list of list', () => {
-      expect(formatResponse(repeatedStructures)).toContain('Paragraph');
+      expect(formatResponse(repeatedStructures)).toContain(thecase.contain);
     })
     test('extracted node are list of list', () => {
-      expect(repeatedStructures[0]).toHaveLength(thecase.expected);
+      expect(repeatedStructures[0]).toHaveLength(thecase.length);
     })
   })
 });

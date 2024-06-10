@@ -9,7 +9,7 @@ export default (html: string): void => {
   const root = parser(html);
   console.log("extracted elements: detectRepeatedStructures");
   // console.log(root);
-  printNodeTree(root);
+  console.log(printNodeTree(root));
 
   // extract repeating structures
   const repeatedStructures = detectRepeatedStructures(root);

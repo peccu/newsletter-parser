@@ -1,4 +1,5 @@
 import { Parser } from 'htmlparser2';
+import util from 'util';
 
 export class Node {
   name: string;
@@ -11,6 +12,9 @@ export class Node {
     this.attribs = attribs;
     this.children = [];
     this.text = '';
+  }
+  [util.inspect.custom](depth: number, options: any) {
+    return printNode(this);
   }
 }
 
@@ -53,7 +57,7 @@ const attrStr = (element: Node | string): string => {
     : "";
 };
 
-const elmStr = (indent: number, element: Node | string): string => {
+const elmStr = (element: Node | string, indent: number): string => {
   if (typeof element !== "object") { // text
     return `${" ".repeat(indent)}"${element}"`;
   }
@@ -61,12 +65,17 @@ const elmStr = (indent: number, element: Node | string): string => {
   return `${" ".repeat(indent)}${element.name}${attrStr(element)}`;
 };
 
-export function printNodeTree(elements: Node, indent: number = 0): void {
+const printNode = (element: Node | string, indent: number = 0): string => {
+  const el = elmStr(element, indent) + "\n";
+  if (typeof element === "object" && element.children.length > 0) {
+    return el + printNodeTree(element, indent + 2);
+  }
+  return el;
+};
+
+export function printNodeTree(elements: Node, indent: number = 0): string {
   // console.log(elements);
-  elements.children.map((element) => {
-    console.log(elmStr(indent, element));
-    if (typeof element === "object" && element.children.length > 0) {
-      printNodeTree(element, indent + 2);
-    }
-  });
+  return elements.children
+    .map((element) => printNode(element, indent))
+    .join("");
 }

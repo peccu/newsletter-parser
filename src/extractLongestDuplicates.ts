@@ -58,7 +58,7 @@ export function detectRepeatedStructures(root: Node): Node[][] {
 
 const structureText = (node: Node | string): string => {
   if (typeof node !== "object") { // text
-    return node;
+    return node.slice(0, 5) + '...';
   }
   // console.log(`node ${typeof node}`);
   // console.log(JSON.stringify(node));
@@ -66,15 +66,20 @@ const structureText = (node: Node | string): string => {
     return `<${node.name}></${node.name}>`;
   }
 
-  const childrenString = node.children.map((child: Node | string) => structureText(child));
+  const childrenString = node.children
+    .map((child: Node | string) => structureText(child))
+    .join("");
   return `<${node.name}>${childrenString}</${node.name}>`;
 };
 
 export function formatResponse(repeatedStructures: Node[][]): string {
   const formattedResponse = repeatedStructures
     .map((structure, index) => {
-      const structureString = structure.map((e) => structureText(e)).join("||");
-      return `${index + 1}. ${structureString}`;
+      const structureString = structure
+        .map((e, i) => `${index+1}-${i+1}. ${structureText(e)}`)
+        .join("\n");
+      return `${index + 1}.
+${structureString}`;
     })
     .join("\n");
   return formattedResponse;

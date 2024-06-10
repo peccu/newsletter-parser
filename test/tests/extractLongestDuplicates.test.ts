@@ -10,21 +10,21 @@ interface Case {
   length: number;
 }
 
-describe('test index.ts', () => {
+describe('test extractLongestduplicates.ts', () => {
   const htmls: Case[] = [
     {
       input: 'test/assets/parse/simple1.html',
-      contain: 'Paragraph',
+      contain: 'Parag',
       length: 3
     },
     {
       input: 'test/assets/parse/simple2.html',
-      contain: 'Paragraph',
+      contain: 'Parag',
       length: 2
     },
     {
       input: 'test/assets/parse/simple3.html',
-      contain: 'Paragraph',
+      contain: 'Parag',
       length: 2
     },
     {

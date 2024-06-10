@@ -8,7 +8,7 @@ import {
   detectRepeatedStructures// , formatResponse
 } from "../../src/extractLongestDuplicates";
 
-describe('test index.ts', () => {
+describe('test parser.ts', () => {
   const html = fs.readFileSync('test/assets/parse/simple1.html', "utf8").toString();
   const root = parser(html);
   const repeatedStructures = detectRepeatedStructures(root);

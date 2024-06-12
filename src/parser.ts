@@ -4,7 +4,7 @@ import util from 'util';
 export class Node {
   name: string;
   attribs: { [key: string]: string };
-  children: (Node | string)[];
+  children: Node[];
   text: string;
 
   constructor(name: string, attribs: { [key: string]: string } = {}) {
@@ -33,7 +33,9 @@ export function parser(html: string): Node {
     ontext(text) {
       // Ignore whitespace and line breaks
       if (!text.trim()) return;
-      currentNode.children.push(text.trim());
+      const newNode = new Node('textnode');
+      newNode.text = text.trim();
+      currentNode.children.push(newNode);
     },
     onclosetag() {
       currentNode = stack.pop() as Node;
@@ -45,29 +47,25 @@ export function parser(html: string): Node {
   return root;
 }
 
-const attrStr = (element: Node | string): string => {
+const attrStr = (element: Node): string => {
   // console.log('debug: element:', element);
   // console.log('debug: element.attribs:', element.attribs);
-  if (typeof element !== "object") { // text
-    return element;
-  }
-  // Node
   return Object.entries(element.attribs).length > 0
     ? ` ${JSON.stringify(element.attribs)}`
     : "";
 };
 
-const elmStr = (element: Node | string, indent: number): string => {
-  if (typeof element !== "object") { // text
-    return `${" ".repeat(indent)}"${element}"`;
+const elmStr = (element: Node, indent: number): string => {
+  if (element.children.length === 0) { // text
+    return `${" ".repeat(indent)}"${element.text}"`;
   }
   // Node
   return `${" ".repeat(indent)}${element.name}${attrStr(element)}`;
 };
 
-const printNode = (element: Node | string, indent: number = 0): string => {
+const printNode = (element: Node, indent: number = 0): string => {
   const el = elmStr(element, indent) + "\n";
-  if (typeof element === "object" && element.children.length > 0) {
+  if (element.children.length > 0) {
     return el + printNodeTree(element, indent + 2);
   }
   return el;

@@ -15,14 +15,13 @@ export function traverseNodes(root: Node): Structures {
       return node.name;
     }
     const structure = node.children
-      .map((child: (Node | string)) => {
-        if (typeof child === "object") {
+      .map((child: (Node)) => {
+        if (child.children.length > 0) { // Node
           // child is Node
           return `${child.name}_${traverse(child)}`;
         }
         // child is text
-        // return child;
-        return "textnode";
+        return child.name;
       })
       .join("/");
 
@@ -56,18 +55,15 @@ export function detectRepeatedStructures(root: Node): Node[][] {
   return deeperNodeDropped.map((key: string) => structures[key]);
 }
 
-const structureText = (node: Node | string): string => {
-  if (typeof node !== "object") { // text
-    return node.slice(0, 5) + '...';
-  }
+const structureText = (node: Node): string => {
   // console.log(`node ${typeof node}`);
   // console.log(JSON.stringify(node));
-  if (node.children.length == 0) { // node
-    return `<${node.name}></${node.name}>`;
+  if (node.children.length == 0) { // text
+    return `<${node.name}>${node.text.slice(0, 5) + '...'}</${node.name}>`;
   }
 
   const childrenString = node.children
-    .map((child: Node | string) => structureText(child))
+    .map((child: Node) => structureText(child))
     .join("");
   return `<${node.name}>${childrenString}</${node.name}>`;
 };

@@ -1,19 +1,28 @@
 import { Parser } from 'htmlparser2';
 import util from 'util';
+import { TreeNode } from './treeNode';
 
-export class Node {
+class _Node {
   name: string;
   attribs: { [key: string]: string };
-  children: Node[];
+  // children: Node[];
   text: string;
 
   constructor(name: string, attribs: { [key: string]: string } = {}) {
     this.name = name;
     this.attribs = attribs;
-    this.children = [];
-    this.text = '';
+    // this.children = [];
+    this.text = "";
   }
-  [util.inspect.custom](depth: number, options: any) {
+}
+
+export class Node extends TreeNode<_Node> {
+  children: TreeNode<_Node>[];
+  constructor(name: string, attribs: { [key: string]: string } = {}) {
+    super(new _Node(name, attribs));
+    this.children = [];
+  }
+  [util.inspect.custom](_depth: number, _options: any): string {
     return printNode(this);
   }
 }
@@ -34,7 +43,7 @@ export function parser(html: string): Node {
       // Ignore whitespace and line breaks
       if (!text.trim()) return;
       const newNode = new Node('textnode');
-      newNode.text = text.trim();
+      newNode.value.text = text.trim();
       currentNode.children.push(newNode);
     },
     onclosetag() {
@@ -50,17 +59,18 @@ export function parser(html: string): Node {
 const attrStr = (element: Node): string => {
   // console.log('debug: element:', element);
   // console.log('debug: element.attribs:', element.attribs);
-  return Object.entries(element.attribs).length > 0
-    ? ` ${JSON.stringify(element.attribs)}`
+  return Object.entries(element.value.attribs).length > 0
+    ? ` ${JSON.stringify(element.value.attribs)}`
     : "";
 };
 
 const elmStr = (element: Node, indent: number): string => {
-  if (element.children.length === 0) { // text
-    return `${" ".repeat(indent)}"${element.text}"`;
+  if (element.children.length === 0) {
+    // text
+    return `${" ".repeat(indent)}"${element.value.text}"`;
   }
   // Node
-  return `${" ".repeat(indent)}${element.name}${attrStr(element)}`;
+  return `${" ".repeat(indent)}${element.value.name}${attrStr(element)}`;
 };
 
 const printNode = (element: Node, indent: number = 0): string => {

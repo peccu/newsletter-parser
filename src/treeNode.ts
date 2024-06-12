@@ -1,3 +1,5 @@
+import util from "util";
+
 export class TreeNode<T> {
   value: T;
   children: TreeNode<T>[];
@@ -5,6 +7,9 @@ export class TreeNode<T> {
   constructor(value: T, children: TreeNode<T>[] = []) {
     this.value = value;
     this.children = children;
+  }
+    [util.inspect.custom](_depth: number, _options: any): string {
+    return "${this.value}";
   }
 }
 

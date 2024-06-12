@@ -12,16 +12,16 @@ export function traverseNodes(root: Node): Structures {
   // push its node
   const traverse = (node: Node): string => {
     if (node.children.length == 0) {
-      return node.name;
+      return node.value.name;
     }
     const structure = node.children
       .map((child: (Node)) => {
         if (child.children.length > 0) { // Node
           // child is Node
-          return `${child.name}_${traverse(child)}`;
+          return `${child.value.name}_${traverse(child)}`;
         }
         // child is text
-        return child.name;
+        return child.value.name;
       })
       .join("/");
 
@@ -59,13 +59,13 @@ const structureText = (node: Node): string => {
   // console.log(`node ${typeof node}`);
   // console.log(JSON.stringify(node));
   if (node.children.length == 0) { // text
-    return `<${node.name}>${node.text.slice(0, 5) + '...'}</${node.name}>`;
+    return `<${node.value.name}>${node.value.text.slice(0, 5) + '...'}</${node.value.name}>`;
   }
 
   const childrenString = node.children
     .map((child: Node) => structureText(child))
     .join("");
-  return `<${node.name}>${childrenString}</${node.name}>`;
+  return `<${node.value.name}>${childrenString}</${node.value.name}>`;
 };
 
 export function formatResponse(repeatedStructures: Node[][]): string {

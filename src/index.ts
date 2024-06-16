@@ -1,4 +1,4 @@
-import { parser, printNodeTree } from "./parser";
+import { parser, nodeTreeString } from "./parser";
 import { detectRepeatedStructures, formatResponse } from "./extractLongestDuplicates";
 
 const process = (html: string): void => {
@@ -9,13 +9,13 @@ const process = (html: string): void => {
   const root = parser(html);
   console.log("extracted elements: detectRepeatedStructures");
   // console.log(root);
-  console.log(printNodeTree(root));
+  console.log(nodeTreeString(root));
 
   // extract repeating structures
   const repeatedStructures = detectRepeatedStructures(root);
   console.log("repeated structures: detectRepeatedStructures");
   // console.log(repeatedStructures);
-  // printNodeTree(repeatedStructures);
+  // nodeTreeString(repeatedStructures);
 
   // あとはaタグを抜き出すなりコンテンツのテキストだけ持ってきて
   // エンベッドしてにいれて評価点を返す、かな

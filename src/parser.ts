@@ -23,7 +23,7 @@ export class Node extends TreeNode<_Node> {
     this.children = [];
   }
   [util.inspect.custom](_depth: number, _options: any): string {
-    return printNode(this);
+    return nodeTreeString(this);
   }
 }
 
@@ -73,17 +73,17 @@ const elmStr = (element: Node, indent: number): string => {
   return `${" ".repeat(indent)}${element.value.name}${attrStr(element)}`;
 };
 
-const printNode = (element: Node, indent: number = 0): string => {
+export const nodeTreeString = (element: Node, indent: number = 0): string => {
   const el = elmStr(element, indent) + "\n";
   if (element.children.length > 0) {
-    return el + printNodeTree(element, indent + 2);
+    return el + childrenString(element, indent + 2);
   }
   return el;
 };
 
-export function printNodeTree(elements: Node, indent: number = 0): string {
+function childrenString(elements: Node, indent: number = 0): string {
   // console.log(elements);
   return elements.children
-    .map((element) => printNode(element, indent))
+    .map((element) => nodeTreeString(element, indent))
     .join("");
 }

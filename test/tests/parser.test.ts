@@ -2,7 +2,7 @@ import { describe, expect, test } from '@jest/globals';
 import fs from "fs";
 
 import {
-  parser// , printNodeTree
+  parser
 } from "../../src/parser";
 import {
   detectRepeatedStructures// , formatResponse

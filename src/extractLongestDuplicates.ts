@@ -5,6 +5,7 @@ interface Structures {
   [key: string]: Node[];
 }
 
+// TODO ignore list like bold tag
 export function traverseNodes(root: Node): Structures {
   const structures: Structures = {};
   // join nested children's tag names

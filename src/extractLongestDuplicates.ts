@@ -72,7 +72,7 @@ export function formatResponse(repeatedStructures: Node[][]): string {
   const formattedResponse = repeatedStructures
     .map((structure, index) => {
       const structureString = structure
-        .map((e, i) => `${index+1}-${i+1}. ${structureText(e)}`)
+        .map((e, i) => `${index + 1}-${i + 1}. ${structureText(e)}`)
         .join("\n");
       return `${index + 1}.
 ${structureString}`;

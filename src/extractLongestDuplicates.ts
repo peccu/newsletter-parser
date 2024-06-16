@@ -14,7 +14,7 @@ export function traverseNodes(root: Node): Structures {
     if (node.children.length == 0) {
       return node.value.name;
     }
-    const structure = node.children
+    const childrenStructure = node.children
       .map((child: (Node)) => {
         if (child.children.length > 0) { // Node
           // child is Node
@@ -25,6 +25,7 @@ export function traverseNodes(root: Node): Structures {
       })
       .join("/");
 
+    const structure = node.value.name + '::' + childrenStructure;
     if (structures.hasOwnProperty(structure)) {
       structures[structure].push(node);
     } else {

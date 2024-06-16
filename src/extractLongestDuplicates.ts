@@ -8,24 +8,17 @@ interface Structures {
 export function traverseNodes(root: Node): Structures {
   const structures: Structures = {};
   // join nested children's tag names
-  // and if the same nessting structure has found
+  // and if the same nesting structure has found
   // push its node
   const traverse = (node: Node): string => {
     if (node.children.length == 0) {
       return node.value.name;
     }
     const childrenStructure = node.children
-      .map((child: (Node)) => {
-        if (child.children.length > 0) { // Node
-          // child is Node
-          return `${child.value.name}_${traverse(child)}`;
-        }
-        // child is text
-        return child.value.name;
-      })
+      .map((child: (Node)) => traverse(child))
       .join("/");
 
-    const structure = node.value.name + '::' + childrenStructure;
+    const structure = `${node.value.name}[${childrenStructure}]`;
     if (structures.hasOwnProperty(structure)) {
       structures[structure].push(node);
     } else {
@@ -45,8 +38,13 @@ export function detectRepeatedStructures(root: Node): Node[][] {
   // console.log('found path', Object.keys(structures));
   // console.log('found structures', Object.values(structures));
 
+  // found nodes are multiple
+  // and, it has the depth > 2
+  // (if the depth is 2, the p>text, div>dext are treated as a repeats)
   const repeatedKeys = Object.keys(structures).filter(
-    (key) => structures[key].length > 1,
+    (key) => structures[key].length > 1
+  ).filter(
+    (key) => key.split('[').length > 2
   );
   // console.log('repeatedKeys', repeatedKeys);
 

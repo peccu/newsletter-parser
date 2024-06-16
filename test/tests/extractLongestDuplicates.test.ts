@@ -8,7 +8,8 @@ interface Case {
   input: string;
   contain: string;
   notContain?: string;
-  length: number;
+  foundRepeats: number;         // repeats set
+  deepLength: number;           // length of first repeats
 }
 
 describe('test extractLongestduplicates.ts', () => {
@@ -16,28 +17,33 @@ describe('test extractLongestduplicates.ts', () => {
     {
       input: 'test/assets/parse/simple1.html',
       contain: 'Parag',
-      length: 3
+      foundRepeats: 1,
+      deepLength: 3
     },
     {
       input: 'test/assets/parse/simple2.html',
       contain: 'Parag',
-      length: 2
+      foundRepeats: 2,
+      deepLength: 2
     },
     {
       input: 'test/assets/parse/simple3.html',
       contain: 'Parag',
-      length: 2
+      foundRepeats: 2,
+      deepLength: 3
     },
     {
       input: 'test/assets/parse/simple4.html',
       contain: 'row',
-      length: 4
+      foundRepeats: 1,
+      deepLength: 4
     },
     {
       input: 'test/assets/parse/simple5.html',
       contain: 'this',
       notContain: 'not d',
-      length: 2
+      foundRepeats: 1,
+      deepLength: 2
     }
   ]
   htmls.map((thecase: Case) => {
@@ -59,8 +65,11 @@ describe('test extractLongestduplicates.ts', () => {
         expect(formatResponse(repeatedStructures)).not.toContain(thecase.notContain);
       }
     })
+    test('extracted node has repeats : ' + thecase.input, () => {
+      expect(repeatedStructures).toHaveLength(thecase.foundRepeats);
+    })
     test('extracted node are list of list : ' + thecase.input, () => {
-      expect(repeatedStructures[0]).toHaveLength(thecase.length);
+      expect(repeatedStructures[0]).toHaveLength(thecase.deepLength);
     })
   })
 });

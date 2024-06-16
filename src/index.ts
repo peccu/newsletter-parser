@@ -1,7 +1,7 @@
 import { parser, printNodeTree } from "./parser";
 import { detectRepeatedStructures, formatResponse } from "./extractLongestDuplicates";
 
-export default (html: string): void => {
+const process = (html: string): void => {
   console.log(
     "----------------------------------------------------------------",
   );
@@ -23,3 +23,4 @@ export default (html: string): void => {
   // フロントやな。フィードバックと既読。
   console.log(formatResponse(repeatedStructures));
 }
+export default process
